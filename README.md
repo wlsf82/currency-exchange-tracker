@@ -71,7 +71,7 @@ A modern Progressive Web App (PWA) for real-time currency exchange rate tracking
 
 ## 📁 Project Structure
 
-```
+```text
 src/
 ├── index.html          # Main HTML file with app structure
 ├── app.js              # Core application logic and API handling
