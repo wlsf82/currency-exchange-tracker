@@ -357,20 +357,43 @@ main {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
 }
 
-.update-btn:hover {
+.update-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
   filter: brightness(1.1);
 }
 
-.update-btn:active {
-  transform: translateY(0);
+.update-btn:active:not(:disabled) {
+  animation: buttonPress 0.2s ease;
+}
+
+.update-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.update-btn.loading {
+  background: var(--primary-color);
+  opacity: 0.8;
+}
+
+.update-btn.loading .update-icon {
+  animation: spin 1s linear infinite;
+}
+
+.update-btn.success {
+  background: var(--green);
+  animation: successPulse 0.6s ease;
 }
 
 .update-icon {
   font-size: 18px;
+  transition: transform 0.3s ease;
 }
 
 /* Status Indicator */
@@ -395,14 +418,17 @@ main {
 .status-dot.loading {
   background: var(--yellow-warning);
   animation: pulse 1.5s infinite;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
 }
 
 .status-dot.success {
   background: var(--green);
+  animation: successPulse 0.6s ease;
 }
 
 .status-dot.error {
   background: var(--red);
+  animation: pulse 2s infinite;
 }
 
 .status-dot.warning {
@@ -412,6 +438,23 @@ main {
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes successPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes buttonPress {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
 }
 
 /* Info Cards */

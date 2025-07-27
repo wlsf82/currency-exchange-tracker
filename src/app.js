@@ -259,6 +259,7 @@ class CurrencyExchangeTracker {
     if (this.isLoading) return;
 
     this.isLoading = true;
+    this.setButtonLoadingState(true);
     this.updateStatus('loading', 'Fetching exchange rates...');
 
     try {
@@ -273,6 +274,7 @@ class CurrencyExchangeTracker {
       if (data && data.rates) {
         this.updateExchangeRates(data);
         this.comparisonData[this.currentCurrency] = data;
+        this.setButtonSuccessState();
         this.updateStatus('success', 'Rates updated successfully');
         this.updateConversion();
       } else {
@@ -283,6 +285,7 @@ class CurrencyExchangeTracker {
       this.handleFetchError();
     } finally {
       this.isLoading = false;
+      this.setButtonLoadingState(false);
     }
   }
 
@@ -305,7 +308,9 @@ class CurrencyExchangeTracker {
 
     // No data available - show error
     this.updateStatus('error', 'Unable to fetch rates - please check connection');
-  }  updateExchangeRates(data) {
+  }
+
+  updateExchangeRates(data) {
     const rates = data.rates;
 
     // Get the two currencies to compare against the current one
@@ -393,6 +398,52 @@ class CurrencyExchangeTracker {
     }
   }
 
+  setButtonLoadingState(isLoading) {
+    const updateBtn = this.elements.updateBtn;
+    if (isLoading) {
+      updateBtn.disabled = true;
+      updateBtn.classList.add('loading');
+      updateBtn.classList.remove('success');
+    } else {
+      updateBtn.disabled = false;
+      updateBtn.classList.remove('loading');
+    }
+  }
+
+  setButtonSuccessState() {
+    const updateBtn = this.elements.updateBtn;
+    updateBtn.classList.add('success');
+    updateBtn.classList.remove('loading');
+
+    // Remove success state after animation
+    setTimeout(() => {
+      updateBtn.classList.remove('success');
+    }, 600);
+  }
+
+  setComparisonButtonLoadingState(isLoading) {
+    const comparisonUpdateBtn = this.elements.comparisonUpdateBtn;
+    if (isLoading) {
+      comparisonUpdateBtn.disabled = true;
+      comparisonUpdateBtn.classList.add('loading');
+      comparisonUpdateBtn.classList.remove('success');
+    } else {
+      comparisonUpdateBtn.disabled = false;
+      comparisonUpdateBtn.classList.remove('loading');
+    }
+  }
+
+  setComparisonButtonSuccessState() {
+    const comparisonUpdateBtn = this.elements.comparisonUpdateBtn;
+    comparisonUpdateBtn.classList.add('success');
+    comparisonUpdateBtn.classList.remove('loading');
+
+    // Remove success state after animation
+    setTimeout(() => {
+      comparisonUpdateBtn.classList.remove('success');
+    }, 600);
+  }
+
   switchView(view) {
     if (this.currentView === view) return;
 
@@ -423,6 +474,7 @@ class CurrencyExchangeTracker {
     if (this.isLoading) return;
 
     this.isLoading = true;
+    this.setComparisonButtonLoadingState(true);
     this.updateStatus('loading', 'Fetching comparison data...');
 
     try {
@@ -455,6 +507,7 @@ class CurrencyExchangeTracker {
       });
 
       this.renderComparisonCards();
+      this.setComparisonButtonSuccessState();
       this.updateStatus('success', 'Comparison data updated');
       this.updateConversion();
     } catch (error) {
@@ -462,6 +515,7 @@ class CurrencyExchangeTracker {
       this.updateStatus('error', 'Failed to update comparison data');
     } finally {
       this.isLoading = false;
+      this.setComparisonButtonLoadingState(false);
     }
   }
 
