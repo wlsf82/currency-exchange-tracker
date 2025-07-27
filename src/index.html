@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Real-time currency exchange rate tracker for Brazilian Real, Euro, and US Dollar with comparison features and offline support.">
+  <meta name="theme-color" content="#198754">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <title>Currency Exchange Tracker</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Icons -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180x180.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>💱 Currency Exchange Tracker</h1>
+
+      <div class="view-toggle">
+        <button type="button" class="view-btn active" data-view="single">
+          <span class="view-icon">📊</span>
+          Single View
+        </button>
+        <button type="button" class="view-btn" data-view="comparison">
+          <span class="view-icon">📈</span>
+          Compare
+        </button>
+      </div>
+
+      <div class="currency-selector">
+        <button type="button" class="currency-btn active" data-currency="BRL">
+          <span class="currency-symbol">R$</span>
+          <span class="currency-name-full">Brazilian Real</span>
+          <span class="currency-name-short">BRL</span>
+        </button>
+        <button type="button" class="currency-btn" data-currency="EUR">
+          <span class="currency-symbol">€</span>
+          <span class="currency-name-full">Euro</span>
+          <span class="currency-name-short">EUR</span>
+        </button>
+        <button type="button" class="currency-btn" data-currency="USD">
+          <span class="currency-symbol">$</span>
+          <span class="currency-name-full">US Dollar</span>
+          <span class="currency-name-short">USD</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Single View -->
+      <div class="single-view" id="singleView">
+        <div class="price-card">
+          <div class="currency-info">
+            <div class="currency-flag" id="currencyFlag">🇧🇷</div>
+            <div class="currency-details">
+              <div class="currency-name" id="currencyName">Brazilian Real</div>
+              <div class="currency-code" id="currencyCode">BRL</div>
+            </div>
+          </div>
+
+          <div class="exchange-rates">
+            <div class="rate-item">
+              <div class="rate-label" id="rateLabel1">to USD</div>
+              <div class="rate-value" id="rateValue1">Loading...</div>
+              <div class="rate-change" id="rateChange1">--</div>
+            </div>
+            <div class="rate-item">
+              <div class="rate-label" id="rateLabel2">to EUR</div>
+              <div class="rate-value" id="rateValue2">Loading...</div>
+              <div class="rate-change" id="rateChange2">--</div>
+            </div>
+          </div>
+
+          <div class="last-updated">
+            Last updated: <span id="lastUpdated">--</span>
+          </div>
+        </div>
+
+        <div class="converter-section">
+          <h2>Currency Converter</h2>
+          <div class="converter">
+            <div class="converter-row">
+              <input type="number" id="fromAmount" placeholder="1.00" value="1.00" min="0" step="0.01">
+              <select id="fromCurrency">
+                <option value="BRL">BRL</option>
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+              </select>
+            </div>
+            <div class="converter-arrow">⇅</div>
+            <div class="converter-row">
+              <input type="number" id="toAmount" placeholder="0.00" readonly>
+              <select id="toCurrency">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="BRL">BRL</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="update-section">
+          <button type="button" class="update-btn" id="updateBtn">
+            <span class="update-icon">🔄</span>
+            Update Rates
+          </button>
+        </div>
+
+        <div class="status-indicator">
+          <div class="status-dot" id="statusDot"></div>
+          <span id="statusText">Ready</span>
+        </div>
+
+        <section>
+          <h2 class="market-stats-title">Exchange Rate Statistics</h2>
+          <div class="info-cards">
+            <div class="info-card">
+              <h3>24h High</h3>
+              <p id="high24h">--</p>
+            </div>
+            <div class="info-card">
+              <h3>24h Low</h3>
+              <p id="low24h">--</p>
+            </div>
+            <div class="info-card">
+              <h3>24h Change</h3>
+              <p id="change24h">--</p>
+            </div>
+            <div class="info-card">
+              <h3>Volatility</h3>
+              <p id="volatility">--</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Comparison View -->
+      <div class="comparison-view hidden" id="comparisonView">
+        <div class="comparison-controls">
+          <h2>Compare Currencies</h2>
+          <p class="comparison-note">All rates shown relative to each currency</p>
+          <div class="currency-checkboxes">
+            <label class="currency-checkbox" data-currency="BRL" for="brl-checkbox">
+              <input type="checkbox" id="brl-checkbox" name="brl-checkbox" data-currency="BRL" checked>
+              <span class="currency-symbol">R$</span>
+              <span class="currency-name-full">Brazilian Real</span>
+              <span class="currency-name-short">BRL</span>
+            </label>
+            <label class="currency-checkbox" data-currency="EUR" for="eur-checkbox">
+              <input type="checkbox" id="eur-checkbox" name="eur-checkbox" data-currency="EUR" checked>
+              <span class="currency-symbol">€</span>
+              <span class="currency-name-full">Euro</span>
+              <span class="currency-name-short">EUR</span>
+            </label>
+            <label class="currency-checkbox" data-currency="USD" for="usd-checkbox">
+              <input type="checkbox" id="usd-checkbox" name="usd-checkbox" data-currency="USD" checked>
+              <span class="currency-symbol">$</span>
+              <span class="currency-name-full">US Dollar</span>
+              <span class="currency-name-short">USD</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="comparison-cards" id="comparisonCards">
+          <!-- Comparison cards will be dynamically generated here -->
+        </div>
+
+        <div class="comparison-update-section">
+          <button type="button" class="update-btn" id="comparisonUpdateBtn">
+            <span class="update-icon">🔄</span>
+            Update Rates
+          </button>
+        </div>
+
+        <div class="status-indicator">
+          <div class="status-dot" id="comparisonStatusDot"></div>
+          <span id="comparisonStatusText">Ready</span>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Exchange rates provided by <a href="https://exchangerate-api.com" target="_blank">ExchangeRate-API</a></p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="currencyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#198754;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#00875f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#003399;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="45" fill="url(#currencyGradient)" stroke="#ffffff" stroke-width="2"/>
+
+  <!-- Currency symbols -->
+  <text x="35" y="40" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#ffffff">R$</text>
+  <text x="60" y="45" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#ffffff">€</text>
+  <text x="45" y="65" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#ffffff">$</text>
+
+  <!-- Exchange arrows -->
+  <path d="M 25 25 L 35 35 M 30 25 L 35 35 L 30 40" stroke="#ffffff" stroke-width="2" fill="none"/>
+  <path d="M 75 75 L 65 65 M 70 75 L 65 65 L 70 60" stroke="#ffffff" stroke-width="2" fill="none"/>
+</svg>
