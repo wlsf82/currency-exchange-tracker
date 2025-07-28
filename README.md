@@ -1,5 +1,7 @@
 # 💱 Currency Exchange Tracker
 
+[![CD](https://github.com/wlsf82/currency-exchange-tracker/actions/workflows/cd.yml/badge.svg)](https://github.com/wlsf82/currency-exchange-tracker/actions)
+
 A modern Progressive Web App (PWA) for real-time currency exchange rate tracking between Brazilian Real (BRL), Euro (EUR), and US Dollar (USD).
 
 ![Currency Exchange Tracker](src/icons/icon-192x192.png)
