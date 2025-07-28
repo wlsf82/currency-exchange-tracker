@@ -664,6 +664,11 @@ main {
   margin-bottom: 30px;
 }
 
+/* When only message card is shown, use block layout to match comparison-controls */
+.comparison-cards.message-only {
+  display: block;
+}
+
 .comparison-card {
   background: var(--card-bg);
   border-radius: var(--border-radius);
@@ -751,7 +756,6 @@ main {
   box-shadow: var(--shadow);
   border: 2px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  max-width: 400px;
   margin: 0 auto;
 }
 
@@ -927,7 +931,7 @@ footer a:hover {
 
   .comparison-message-card {
     padding: 30px 15px;
-    margin: 0 10px;
+    margin: 0 auto;
   }
 
   .message-icon {

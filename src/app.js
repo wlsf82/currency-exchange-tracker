@@ -540,6 +540,9 @@ class CurrencyExchangeTracker {
 
     // Check if fewer than 2 currencies are selected
     if (this.selectedCurrencies.length < 2) {
+      // Add class to indicate message card is shown
+      this.elements.comparisonCards.classList.add('message-only');
+
       const messageCard = document.createElement('div');
       messageCard.className = 'comparison-message-card';
       messageCard.innerHTML = `
@@ -551,6 +554,9 @@ class CurrencyExchangeTracker {
       this.elements.comparisonCards.appendChild(messageCard);
       return;
     }
+
+    // Remove the message-only class when showing comparison cards
+    this.elements.comparisonCards.classList.remove('message-only');
 
     this.selectedCurrencies.forEach(currency => {
       const config = this.currencyConfig[currency];
