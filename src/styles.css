@@ -685,11 +685,12 @@ footer p {
 
 footer a {
   color: var(--primary-color);
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 footer a:hover {
   text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
 
 /* Utility Classes */
