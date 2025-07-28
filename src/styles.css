@@ -831,6 +831,8 @@ footer a:hover {
   .currency-btn {
     min-width: 100px;
     padding: 12px 15px;
+    flex-direction: row;
+    gap: 6px;
   }
 
   .currency-symbol {
@@ -890,6 +892,8 @@ footer a:hover {
   .currency-btn {
     min-width: 80px;
     padding: 12px 8px;
+    flex-direction: row;
+    gap: 4px;
   }
 
   .currency-name-full {
