@@ -131,7 +131,7 @@ class CurrencyExchangeTracker {
 
     // Comparison update button
     this.elements.comparisonUpdateBtn.addEventListener('click', () => {
-      if (this.selectedCurrencies.length > 0) {
+      if (this.selectedCurrencies.length >= 2) {
         this.fetchComparisonData();
       }
     });
@@ -469,7 +469,12 @@ class CurrencyExchangeTracker {
       this.elements.singleView.classList.add('hidden');
       this.elements.comparisonView.classList.remove('hidden');
       document.querySelector('.currency-selector').style.display = 'none';
-      this.fetchComparisonData();
+      if (this.selectedCurrencies.length >= 2) {
+        this.fetchComparisonData();
+      } else {
+        // Show the message if fewer than 2 currencies are selected
+        this.renderComparisonCards();
+      }
     }
   }
 
@@ -533,6 +538,20 @@ class CurrencyExchangeTracker {
 
     this.elements.comparisonCards.innerHTML = '';
 
+    // Check if fewer than 2 currencies are selected
+    if (this.selectedCurrencies.length < 2) {
+      const messageCard = document.createElement('div');
+      messageCard.className = 'comparison-message-card';
+      messageCard.innerHTML = `
+        <div class="comparison-message">
+          <div class="message-icon">📊</div>
+          <div class="message-text">Select at least two currencies to compare</div>
+        </div>
+      `;
+      this.elements.comparisonCards.appendChild(messageCard);
+      return;
+    }
+
     this.selectedCurrencies.forEach(currency => {
       const config = this.currencyConfig[currency];
       const data = this.comparisonData[currency];
@@ -583,10 +602,15 @@ class CurrencyExchangeTracker {
       .filter(checkbox => checkbox.checked)
       .map(checkbox => checkbox.dataset.currency);
 
-    this.selectedCurrencies = selected.length > 0 ? selected : ['BRL', 'EUR', 'USD'];
+    this.selectedCurrencies = selected;
 
     if (this.currentView === 'comparison') {
-      this.fetchComparisonData();
+      if (this.selectedCurrencies.length >= 2) {
+        this.fetchComparisonData();
+      } else {
+        // Show message immediately when fewer than 2 currencies are selected (including when none are selected)
+        this.renderComparisonCards();
+      }
     }
   }
 
@@ -599,7 +623,7 @@ class CurrencyExchangeTracker {
     this.fetchInterval = setInterval(() => {
       if (this.currentView === 'single') {
         this.fetchExchangeRates();
-      } else {
+      } else if (this.selectedCurrencies.length >= 2) {
         this.fetchComparisonData();
       }
     }, 30000);
