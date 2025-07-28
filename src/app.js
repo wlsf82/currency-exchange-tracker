@@ -203,6 +203,7 @@ class CurrencyExchangeTracker {
 
     if (fromAmount === 0 || fromCurrency === toCurrency) {
       this.elements.toAmount.value = fromAmount.toFixed(2);
+      this.elements.toAmount.placeholder = '';
       return;
     }
 
@@ -210,8 +211,10 @@ class CurrencyExchangeTracker {
     if (rate) {
       const toAmount = fromAmount * rate;
       this.elements.toAmount.value = toAmount.toFixed(4);
+      this.elements.toAmount.placeholder = '';
     } else {
-      this.elements.toAmount.value = 'N/A';
+      this.elements.toAmount.value = '';
+      this.elements.toAmount.placeholder = 'N/A';
     }
   }
 
