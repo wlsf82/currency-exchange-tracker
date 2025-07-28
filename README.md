@@ -59,8 +59,8 @@ A modern Progressive Web App (PWA) for real-time currency exchange rate tracking
 
 ### APIs
 
-- **Primary**: [ExchangeRate-API](https://api.exchangerate-api.com)
-- **Fallback**: FXRatesAPI
+- **Primary**: [FXRatesAPI](https://fxratesapi.com)
+- **Fallback**: [Exchange API by fawazahmed0](https://github.com/fawazahmed0/exchange-api)
 - **Offline**: Service Worker cached data when available
 
 ### Architecture
@@ -126,8 +126,8 @@ The app uses multiple API endpoints for reliability:
 
 ```javascript
 {
-  baseUrl: 'https://api.exchangerate-api.com/v4/latest/',
-  fallbackUrl: 'https://api.fxratesapi.com/latest?base='
+  baseUrl: 'https://api.fxratesapi.com/latest?base=',
+  fallbackUrl: 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/'
 }
 ```
 
@@ -187,7 +187,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 🔗 Attribution
 
-- Exchange rates provided by [ExchangeRate-API](https://exchangerate-api.com)
+- Exchange rates provided by [FXRatesAPI](https://fxratesapi.com) or [Exchange API by fawazahmed0](https://github.com/fawazahmed0/exchange-api)
 - Icons and design created specifically for this project
 - Built with modern web standards and best practices
 

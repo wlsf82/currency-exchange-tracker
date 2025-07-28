@@ -39,8 +39,8 @@ class CurrencyExchangeTracker {
 
     // Exchange rate API configuration
     this.apiConfig = {
-      baseUrl: 'https://api.exchangerate-api.com/v4/latest/',
-      fallbackUrl: 'https://api.fxratesapi.com/latest?base='
+      baseUrl: 'https://api.fxratesapi.com/latest?base=',
+      fallbackUrl: 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/'
     };
 
     this.initializeElements();
@@ -339,13 +339,25 @@ class CurrencyExchangeTracker {
 
   async handleFetchError() {
     try {
-      // Try fallback API
-      const response = await fetch(`${this.apiConfig.fallbackUrl}${this.currentCurrency}`);
+      // Try fallback API (fawazahmed0/exchange-api format)
+      const response = await fetch(`${this.apiConfig.fallbackUrl}${this.currentCurrency.toLowerCase()}.json`);
       if (response.ok) {
         const data = await response.json();
-        if (data && data.rates) {
-          this.updateExchangeRates(data);
-          this.comparisonData[this.currentCurrency] = data;
+        // Convert fawazahmed0 format to our expected format
+        if (data && data[this.currentCurrency.toLowerCase()]) {
+          const convertedData = {
+            base: this.currentCurrency,
+            rates: {}
+          };
+
+          // Convert from the new API format to our expected format
+          const ratesData = data[this.currentCurrency.toLowerCase()];
+          for (const [currency, rate] of Object.entries(ratesData)) {
+            convertedData.rates[currency.toUpperCase()] = rate;
+          }
+
+          this.updateExchangeRates(convertedData);
+          this.comparisonData[this.currentCurrency] = convertedData;
           this.updateStatus('warning', 'Using fallback rates');
           return;
         }
