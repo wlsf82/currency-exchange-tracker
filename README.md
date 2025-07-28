@@ -12,7 +12,6 @@ A modern Progressive Web App (PWA) for real-time currency exchange rate tracking
 
 - Real-time exchange rates for selected base currency
 - Live rate changes with percentage indicators
-- 24h statistics including high, low, and volatility
 - Auto-refresh every 30 seconds with animated loading states
 - Clean, responsive interface with smooth animations
 

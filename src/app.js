@@ -84,10 +84,6 @@ class CurrencyExchangeTracker {
       lastUpdated: document.getElementById('lastUpdated'),
       statusDot: document.getElementById('statusDot'),
       statusText: document.getElementById('statusText'),
-      high24h: document.getElementById('high24h'),
-      low24h: document.getElementById('low24h'),
-      change24h: document.getElementById('change24h'),
-      volatility: document.getElementById('volatility'),
       updateBtn: document.getElementById('updateBtn'),
       currencyButtons: document.querySelectorAll('.currency-btn'),
 
@@ -403,9 +399,6 @@ class CurrencyExchangeTracker {
       this.elements.rateChange2.className = 'rate-change';
     }
 
-    // Update statistics (simulated)
-    this.updateStatistics(rates);
-
     // Update last updated time
     this.elements.lastUpdated.textContent = new Date().toLocaleTimeString();
 
@@ -430,22 +423,6 @@ class CurrencyExchangeTracker {
     } else {
       element.className = 'rate-change';
     }
-  }
-
-  updateStatistics(rates) {
-    // Simulate 24h statistics (in real implementation, you'd get this from API)
-    const mainRate = this.currentCurrency === 'USD' ? (rates.EUR || 1) : (rates.USD || 1);
-    const variation = mainRate * 0.02; // 2% variation simulation
-
-    this.elements.high24h.textContent = (mainRate + variation).toFixed(4);
-    this.elements.low24h.textContent = (mainRate - variation).toFixed(4);
-
-    const change24h = (Math.random() - 0.5) * 2; // Random change between -1% and +1%
-    this.elements.change24h.textContent = `${change24h >= 0 ? '+' : ''}${change24h.toFixed(2)}%`;
-    this.elements.change24h.className = change24h >= 0 ? 'positive' : 'negative';
-
-    const volatilityPercent = Math.abs(variation / mainRate) * 100;
-    this.elements.volatility.textContent = `${volatilityPercent.toFixed(2)}%`;
   }
 
   updateStatus(type, message) {
