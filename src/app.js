@@ -594,6 +594,11 @@ class CurrencyExchangeTracker {
       // Add class to indicate message card is shown
       this.elements.comparisonCards.classList.add('message-only');
 
+      // Disable the update button when showing the message
+      if (this.elements.comparisonUpdateBtn) {
+        this.elements.comparisonUpdateBtn.disabled = true;
+      }
+
       const messageCard = document.createElement('div');
       messageCard.className = 'comparison-message-card';
       messageCard.innerHTML = `
@@ -608,6 +613,11 @@ class CurrencyExchangeTracker {
 
     // Remove the message-only class when showing comparison cards
     this.elements.comparisonCards.classList.remove('message-only');
+
+    // Re-enable the update button when showing comparison cards
+    if (this.elements.comparisonUpdateBtn) {
+      this.elements.comparisonUpdateBtn.disabled = false;
+    }
 
     this.selectedCurrencies.forEach(currency => {
       const config = this.currencyConfig[currency];

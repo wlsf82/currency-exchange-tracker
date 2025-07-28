@@ -1,5 +1,5 @@
 const CACHE_NAME = 'currency-tracker-v11';
-const API_CACHE_NAME = 'currency-api-cache-v11';
+const API_CACHE_NAME = 'currency-api-cache-v12';
 const urlsToCache = [
   './index.html',
   './app.js',
