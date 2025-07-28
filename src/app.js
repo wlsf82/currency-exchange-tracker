@@ -79,8 +79,6 @@ class CurrencyExchangeTracker {
       rateLabel2: document.getElementById('rateLabel2'),
       rateValue1: document.getElementById('rateValue1'),
       rateValue2: document.getElementById('rateValue2'),
-      rateChange1: document.getElementById('rateChange1'),
-      rateChange2: document.getElementById('rateChange2'),
       lastUpdated: document.getElementById('lastUpdated'),
       statusDot: document.getElementById('statusDot'),
       statusText: document.getElementById('statusText'),
@@ -381,22 +379,16 @@ class CurrencyExchangeTracker {
     this.elements.rateLabel1.textContent = `to ${currency1}`;
     if (rates[currency1]) {
       this.elements.rateValue1.textContent = rates[currency1].toFixed(4);
-      this.updateRateChange(this.elements.rateChange1, rates[currency1], this.lastRates?.[currency1]);
     } else {
       this.elements.rateValue1.textContent = 'N/A';
-      this.elements.rateChange1.textContent = '--';
-      this.elements.rateChange1.className = 'rate-change';
     }
 
     // Update second comparison rate
     this.elements.rateLabel2.textContent = `to ${currency2}`;
     if (rates[currency2]) {
       this.elements.rateValue2.textContent = rates[currency2].toFixed(4);
-      this.updateRateChange(this.elements.rateChange2, rates[currency2], this.lastRates?.[currency2]);
     } else {
       this.elements.rateValue2.textContent = 'N/A';
-      this.elements.rateChange2.textContent = '--';
-      this.elements.rateChange2.className = 'rate-change';
     }
 
     // Update last updated time
@@ -404,25 +396,6 @@ class CurrencyExchangeTracker {
 
     // Store current rates for next comparison
     this.lastRates = { ...rates };
-  }
-
-  updateRateChange(element, currentRate, previousRate) {
-    if (!previousRate) {
-      element.textContent = '--';
-      element.className = 'rate-change';
-      return;
-    }
-
-    const change = ((currentRate - previousRate) / previousRate) * 100;
-    element.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
-
-    if (change > 0) {
-      element.className = 'rate-change positive';
-    } else if (change < 0) {
-      element.className = 'rate-change negative';
-    } else {
-      element.className = 'rate-change';
-    }
   }
 
   updateStatus(type, message) {

@@ -296,19 +296,6 @@ main {
   margin-bottom: 5px;
 }
 
-.rate-change {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.rate-change.positive {
-  color: var(--green);
-}
-
-.rate-change.negative {
-  color: var(--red);
-}
-
 .last-updated {
   text-align: center;
   font-size: 12px;
