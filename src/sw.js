@@ -1,5 +1,5 @@
-const CACHE_NAME = 'currency-tracker-v11';
-const API_CACHE_NAME = 'currency-api-cache-v12';
+const CACHE_NAME = 'currency-tracker-v13';
+const API_CACHE_NAME = 'currency-api-cache-v13';
 const urlsToCache = [
   './index.html',
   './app.js',
@@ -15,6 +15,7 @@ const urlsToCache = [
 
 // Install event - cache resources
 self.addEventListener('install', (event) => {
+  console.log('Service Worker installing...');
   event.waitUntil(
     Promise.all([
       caches.open(CACHE_NAME)
@@ -27,7 +28,10 @@ self.addEventListener('install', (event) => {
           console.log('Opened API cache');
           return cache;
         })
-    ])
+    ]).then(() => {
+      console.log('Service Worker installed, skipping waiting...');
+      return self.skipWaiting(); // Force the service worker to take control immediately
+    })
   );
 });
 
@@ -114,17 +118,24 @@ async function handleApiRequest(request) {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
+  console.log('Service Worker activating...');
   const cacheWhitelist = [CACHE_NAME, API_CACHE_NAME];
 
   event.waitUntil(
     caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
+      return Promise.all([
+        // Delete old caches
+        ...cacheNames.map((cacheName) => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
+            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
-        })
-      );
+        }),
+        // Take control of all clients immediately
+        self.clients.claim()
+      ]);
+    }).then(() => {
+      console.log('Service Worker activated and took control');
     })
   );
 });

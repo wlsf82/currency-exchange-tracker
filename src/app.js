@@ -714,6 +714,27 @@ class CurrencyExchangeTracker {
       try {
         const registration = await navigator.serviceWorker.register('./sw.js');
         console.log('Service Worker registered successfully:', registration.scope);
+
+        // Handle service worker updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          console.log('New service worker found, installing...');
+
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              console.log('New service worker installed, will take control on next load');
+              // Optionally reload the page to activate the new service worker immediately
+              // window.location.reload();
+            }
+          });
+        });
+
+        // Listen for controlling service worker changes
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          console.log('Service worker controller changed, reloading...');
+          window.location.reload();
+        });
+
       } catch (error) {
         console.error('Service Worker registration failed:', error);
       }
