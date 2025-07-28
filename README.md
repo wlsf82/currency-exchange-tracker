@@ -75,13 +75,13 @@ A modern Progressive Web App (PWA) for real-time currency exchange rate tracking
 
 ```text
 src/
-├── index.html          # Main HTML file with app structure
-├── app.js              # Core application logic and API handling
-├── styles.css          # Complete CSS styling with responsive design
-├── manifest.json       # PWA manifest configuration
-├── sw.js              # Service Worker for offline functionality
-├── favicon.svg        # Scalable app icon
-└── icons/             # PWA icons in multiple sizes
+├── index.html           # Main HTML file with app structure
+├── app.js               # Core application logic and API handling
+├── styles.css           # Complete CSS styling with responsive design
+├── manifest.json        # PWA manifest configuration
+├── sw.js                # Service Worker for offline functionality
+├── favicon.svg          # Scalable app icon
+└── icons/               # PWA icons in multiple sizes
     ├── icon-144x144.png
     ├── icon-152x152.png
     ├── icon-180x180.png
