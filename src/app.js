@@ -7,6 +7,7 @@ class CurrencyExchangeTracker {
     this.currentView = 'single'; // 'single' or 'comparison'
     this.comparisonData = {}; // Store data for all currencies
     this.selectedCurrencies = ['BRL', 'EUR', 'USD']; // Default comparison selection
+    this.isOnline = navigator.onLine; // Track online status
 
     // Currency configurations
     this.currencyConfig = {
@@ -45,6 +46,7 @@ class CurrencyExchangeTracker {
     this.initializeElements();
     this.registerServiceWorker();
     this.setupEventListeners();
+    this.setupNetworkListeners(); // Add network event listeners
     this.updateTheme();
     this.updateCurrencyInfo();
 
@@ -157,6 +159,43 @@ class CurrencyExchangeTracker {
     });
   }
 
+  setupNetworkListeners() {
+    // Listen for online/offline events
+    window.addEventListener('online', () => {
+      this.handleOnlineStatus(true);
+    });
+
+    window.addEventListener('offline', () => {
+      this.handleOnlineStatus(false);
+    });
+
+    // Set initial status
+    this.handleOnlineStatus(navigator.onLine);
+  }
+
+  handleOnlineStatus(isOnline) {
+    this.isOnline = isOnline;
+
+    if (isOnline) {
+      this.updateStatus('success', 'Back online - refreshing data...');
+      // Restart auto-fetch when coming back online
+      this.startAutoFetch();
+      // Immediately fetch fresh data
+      if (this.currentView === 'single') {
+        this.fetchExchangeRates();
+      } else if (this.selectedCurrencies.length >= 2) {
+        this.fetchComparisonData();
+      }
+    } else {
+      this.updateStatus('error', 'Offline - showing cached data');
+      // Stop auto-fetch when going offline
+      if (this.fetchInterval) {
+        clearInterval(this.fetchInterval);
+        this.fetchInterval = null;
+      }
+    }
+  }
+
   switchCurrency(currency) {
     if (this.currentCurrency === currency || this.isLoading) return;
 
@@ -260,6 +299,12 @@ class CurrencyExchangeTracker {
 
   async fetchExchangeRates() {
     if (this.isLoading) return;
+
+    // Check if we're offline
+    if (!this.isOnline) {
+      this.updateStatus('error', 'Offline - cannot fetch new rates');
+      return;
+    }
 
     this.isLoading = true;
     this.setButtonLoadingState(true);
@@ -481,6 +526,12 @@ class CurrencyExchangeTracker {
   async fetchComparisonData() {
     if (this.isLoading) return;
 
+    // Check if we're offline
+    if (!this.isOnline) {
+      this.updateStatus('error', 'Offline - cannot fetch new comparison data');
+      return;
+    }
+
     this.isLoading = true;
     this.setComparisonButtonLoadingState(true);
     this.updateStatus('loading', 'Fetching comparison data...');
@@ -625,8 +676,20 @@ class CurrencyExchangeTracker {
       clearInterval(this.fetchInterval);
     }
 
+    // Only start auto-fetch if we're online
+    if (!this.isOnline) {
+      return;
+    }
+
     // Fetch every 30 seconds
     this.fetchInterval = setInterval(() => {
+      // Double-check online status before each fetch
+      if (!this.isOnline) {
+        clearInterval(this.fetchInterval);
+        this.fetchInterval = null;
+        return;
+      }
+
       if (this.currentView === 'single') {
         this.fetchExchangeRates();
       } else if (this.selectedCurrencies.length >= 2) {
@@ -653,18 +716,4 @@ let currencyTracker;
 
 document.addEventListener('DOMContentLoaded', () => {
   currencyTracker = new CurrencyExchangeTracker();
-});
-
-// Handle online/offline status
-window.addEventListener('online', () => {
-  if (currencyTracker) {
-    currencyTracker.updateStatus('success', 'Back online');
-    currencyTracker.fetchExchangeRates();
-  }
-});
-
-window.addEventListener('offline', () => {
-  if (currencyTracker) {
-    currencyTracker.updateStatus('error', 'Offline - showing cached rates');
-  }
 });

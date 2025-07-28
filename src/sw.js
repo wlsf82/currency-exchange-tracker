@@ -1,4 +1,5 @@
-const CACHE_NAME = 'currency-tracker-v10';
+const CACHE_NAME = 'currency-tracker-v11';
+const API_CACHE_NAME = 'currency-api-cache-v11';
 const urlsToCache = [
   './index.html',
   './app.js',
@@ -15,23 +16,40 @@ const urlsToCache = [
 // Install event - cache resources
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
+    Promise.all([
+      caches.open(CACHE_NAME)
+        .then((cache) => {
+          console.log('Opened cache');
+          return cache.addAll(urlsToCache);
+        }),
+      caches.open(API_CACHE_NAME)
+        .then((cache) => {
+          console.log('Opened API cache');
+          return cache;
+        })
+    ])
   );
 });
 
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
-  // Skip cross-origin requests
-  if (!event.request.url.startsWith(self.location.origin)) {
+  const request = event.request;
+  const url = new URL(request.url);
+
+  // Handle API requests (exchange rates)
+  if (url.hostname === 'api.exchangerate-api.com' || url.hostname === 'api.fxratesapi.com') {
+    event.respondWith(handleApiRequest(request));
     return;
   }
 
+  // Skip other cross-origin requests
+  if (!request.url.startsWith(self.location.origin)) {
+    return;
+  }
+
+  // Handle app resources
   event.respondWith(
-    caches.match(event.request)
+    caches.match(request)
       .then((response) => {
         // Cache hit - return response
         if (response) {
@@ -39,7 +57,7 @@ self.addEventListener('fetch', (event) => {
         }
 
         // Clone the request because it's a stream
-        const fetchRequest = event.request.clone();
+        const fetchRequest = request.clone();
 
         return fetch(fetchRequest).then((response) => {
           // Check if we received a valid response
@@ -52,7 +70,7 @@ self.addEventListener('fetch', (event) => {
 
           caches.open(CACHE_NAME)
             .then((cache) => {
-              cache.put(event.request, responseToCache);
+              cache.put(request, responseToCache);
             });
 
           return response;
@@ -61,9 +79,42 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
+// Handle API requests with cache-first strategy for offline support
+async function handleApiRequest(request) {
+  try {
+    // Try network first
+    const response = await fetch(request);
+
+    if (response.ok) {
+      // Cache successful responses
+      const cache = await caches.open(API_CACHE_NAME);
+      await cache.put(request, response.clone());
+      return response;
+    }
+
+    // If network fails, try cache
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+
+    // If no cache, return the failed response
+    return response;
+  } catch (error) {
+    // Network error - try cache
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+
+    // No cache available, return error
+    throw error;
+  }
+}
+
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  const cacheWhitelist = [CACHE_NAME];
+  const cacheWhitelist = [CACHE_NAME, API_CACHE_NAME];
 
   event.waitUntil(
     caches.keys().then((cacheNames) => {
