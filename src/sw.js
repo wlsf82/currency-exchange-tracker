@@ -1,4 +1,4 @@
-const CACHE_NAME = 'currency-tracker-v6';
+const CACHE_NAME = 'currency-tracker-v7';
 const urlsToCache = [
   './index.html',
   './app.js',
