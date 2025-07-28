@@ -91,6 +91,7 @@
           <div class="converter">
             <div class="converter-row">
               <input type="number" id="fromAmount" placeholder="1.00" value="1.00" min="0" step="0.01">
+              <label for="fromCurrency" class="sr-only">From Currency</label>
               <select id="fromCurrency">
                 <option value="BRL">BRL</option>
                 <option value="EUR">EUR</option>
@@ -100,6 +101,7 @@
             <div class="converter-arrow">⇅</div>
             <div class="converter-row">
               <input type="number" id="toAmount" placeholder="0.00" readonly>
+              <label for="toCurrency" class="sr-only">To Currency</label>
               <select id="toCurrency">
                 <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
