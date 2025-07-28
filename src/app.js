@@ -243,7 +243,7 @@ class CurrencyExchangeTracker {
     const rate = this.getExchangeRate(fromCurrency, toCurrency);
     if (rate) {
       const toAmount = fromAmount * rate;
-      this.elements.toAmount.value = toAmount.toFixed(4);
+      this.elements.toAmount.value = toAmount.toFixed(2);
       this.elements.toAmount.placeholder = '';
     } else {
       this.elements.toAmount.value = '';
@@ -378,7 +378,7 @@ class CurrencyExchangeTracker {
     // Update first comparison rate
     this.elements.rateLabel1.textContent = `to ${currency1}`;
     if (rates[currency1]) {
-      this.elements.rateValue1.textContent = rates[currency1].toFixed(4);
+      this.elements.rateValue1.textContent = rates[currency1].toFixed(2);
     } else {
       this.elements.rateValue1.textContent = 'N/A';
     }
@@ -386,7 +386,7 @@ class CurrencyExchangeTracker {
     // Update second comparison rate
     this.elements.rateLabel2.textContent = `to ${currency2}`;
     if (rates[currency2]) {
-      this.elements.rateValue2.textContent = rates[currency2].toFixed(4);
+      this.elements.rateValue2.textContent = rates[currency2].toFixed(2);
     } else {
       this.elements.rateValue2.textContent = 'N/A';
     }
@@ -601,7 +601,7 @@ class CurrencyExchangeTracker {
         return `
           <div class="comparison-rate">
             <span class="to-currency">${toConfig.flag} ${toCurrency}</span>
-            <span class="rate-value">${rate ? rate.toFixed(4) : 'N/A'}</span>
+            <span class="rate-value">${rate ? rate.toFixed(2) : 'N/A'}</span>
           </div>
         `;
       }).join('');
