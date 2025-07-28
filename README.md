@@ -108,6 +108,7 @@ src/
 - **Rate Changes**: Color-coded positive/negative indicators
 - **Loading States**: Visual feedback for data fetching
 - **Status Indicators**: Connection and update status
+- **Gradient Effects**: Modern gradient styling on all interactive buttons
 
 ### UI Animations
 
@@ -115,6 +116,7 @@ src/
 - **Status Animations**: Pulsing and glowing effects for different states
 - **Success Feedback**: Brief success animations for completed actions
 - **Press Effects**: Tactile feedback for button interactions
+- **Gradient Transitions**: Smooth gradient changes on hover and active states
 
 ## 🔧 Configuration
 
