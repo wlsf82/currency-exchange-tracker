@@ -378,7 +378,8 @@ class CurrencyExchangeTracker {
     // Update first comparison rate
     this.elements.rateLabel1.textContent = `to ${currency1}`;
     if (rates[currency1]) {
-      this.elements.rateValue1.textContent = rates[currency1].toFixed(2);
+      const currency1Symbol = this.currencyConfig[currency1].icon;
+      this.elements.rateValue1.textContent = `${currency1Symbol} ${rates[currency1].toFixed(2)}`;
     } else {
       this.elements.rateValue1.textContent = 'N/A';
     }
@@ -386,7 +387,8 @@ class CurrencyExchangeTracker {
     // Update second comparison rate
     this.elements.rateLabel2.textContent = `to ${currency2}`;
     if (rates[currency2]) {
-      this.elements.rateValue2.textContent = rates[currency2].toFixed(2);
+      const currency2Symbol = this.currencyConfig[currency2].icon;
+      this.elements.rateValue2.textContent = `${currency2Symbol} ${rates[currency2].toFixed(2)}`;
     } else {
       this.elements.rateValue2.textContent = 'N/A';
     }
@@ -601,7 +603,7 @@ class CurrencyExchangeTracker {
         return `
           <div class="comparison-rate">
             <span class="to-currency">${toConfig.flag} ${toCurrency}</span>
-            <span class="rate-value">${rate ? rate.toFixed(2) : 'N/A'}</span>
+            <span class="rate-value">${rate ? `${toConfig.icon} ${rate.toFixed(2)}` : 'N/A'}</span>
           </div>
         `;
       }).join('');
